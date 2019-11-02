@@ -1,0 +1,88 @@
+
+
+<!DOCTYPE html>
+<html lang="de">
+
+<!--
+font by https://www.keshikan.net/fonts-e.html
+-->
+
+
+<head>
+    <meta charset="utf-8" />
+    <title>Jugend Hackt Presentationscountdown</title>
+
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/moment.min.js"></script>
+</head>
+
+<body>
+    <div class="countdown"></div>
+</body>
+
+</html>
+<script type="text/javascript">
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    var urlParams = getUrlVars();
+    console.log(urlParams);
+
+
+    var duration = moment.duration({
+        'minutes': 3,
+        'seconds': 00
+
+    });
+
+    if (urlParams.duration) {
+        duration = moment.duration({
+            'minutes': urlParams.duration,
+            'seconds': 00
+
+        });
+    }
+
+    var timestamp = new Date(0, 0, 0, 2, 10, 30);
+    var interval = 1;
+    var timer = setInterval(function () {
+        timestamp = new Date(timestamp.getTime() + interval * 1000);
+
+        duration = moment.duration(duration.asSeconds() - interval, 'seconds');
+        var min = duration.minutes();
+        var sec = duration.seconds();
+
+        
+        if (min < 1 && sec < 30) {
+            $('.countdown').addClass("alert");
+        }
+        else if (min < 1) {
+            $('.countdown').addClass("one-minute");
+        }
+
+        sec -= 1;
+        if (min < 0) return clearInterval(timer);
+        if (min < 10 && min.length != 2) min = '0' + min;
+        if (sec < 0 && min != 0) {
+            min -= 1;
+            sec = 59;
+        } else if (sec < 10 && sec.length != 2) sec = '0' + sec;
+
+        $('.countdown').text(min + ':' + sec);
+        if (min == 0 && sec == 0)
+            clearInterval(timer);
+
+
+    }, 1000);
+
+</script>
